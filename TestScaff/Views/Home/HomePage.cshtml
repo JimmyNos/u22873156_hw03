@@ -1,0 +1,240 @@
+﻿
+@model TestScaff.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<!-- Home Page -->
+<div class="container my-4" id="home">
+    <h2 class="text-left-4">Home</h2>
+
+    <div class="row">
+        <!-- Students List -->
+        <div class="col-md-6">
+            <h4>Students</h4>
+            <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
+                <table class="table table-borderless">
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Class</th>
+                        <th>Points</th>
+                    </tr>
+                    @foreach (var item in Model.Students)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.studentId)</td>
+                            <td>@Html.DisplayFor(modelItem => item.name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.surname)</td>
+                            <td>@Html.DisplayFor(modelItem => item.age)</td>
+                            <td>@Html.DisplayFor(modelItem => item.gender)</td>
+                            <td>@Html.DisplayFor(modelItem => item.@class)</td>
+                            <td>@Html.DisplayFor(modelItem => item.point)</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <button id="addStudent" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createStudentModal" data-url="@Url.Action("Create", "students")">Add Student</button>
+        </div>
+
+        <!-- Books List -->
+        <div class="col-md-6">
+            <h4>Books</h4>
+            <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
+                <table class="table table-borderless">
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Points</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                    </tr>
+                    @foreach (var item in Model.Books)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.bookId)</td>
+                            <td>@Html.DisplayFor(modelItem => item.title)</td>
+                            <td>@Html.DisplayFor(modelItem => item.genre)</td>
+                            <td>@Html.DisplayFor(modelItem => item.point)</td>
+                            <td>@Html.DisplayFor(modelItem => item.author)</td>
+                            <td>@Html.DisplayFor(modelItem => item.status)</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <button id="addBook" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createBookModal" data-url="@Url.Action("Create", "books")">Add Book</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for creating student -->
+<div class="modal fade" id="createStudentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Student</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="studentModalContent">
+                <!-- Form content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for creating book -->
+<div class="modal fade" id="createBookModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Book</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="bookModalContent">
+                <!-- Form content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            // Load the form for adding a new student
+            $("#addStudent").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#studentModalContent").html(data);     
+                    $("#createStudentModal").modal("show");
+                });
+            });
+
+            // Load the form for adding a new book
+            $("#addBook").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#bookModalContent").html(data);
+                    $("#createBookModal").modal("show");
+                });
+            });
+        });
+    </script>
+    }
+<style>
+    /* General Page Styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa; /* Light background color */
+        color: #333;
+    }
+
+    #home h2 {
+        color: #333;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    h4 {
+        color: #007bff; /* Distinct color for section headings */
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    /* Table Styling */
+    .table-responsive {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        overflow: hidden;
+    }
+
+    .table-borderless th {
+        color: #555;
+        font-weight: 600;
+        background-color: #f1f1f1;
+    }
+
+    .table-borderless td,
+    .table-borderless th {
+        padding: 12px 10px;
+        vertical-align: middle;
+    }
+
+    .table-borderless tr:nth-child(even) {
+        background-color: #f9f9f9; /* Light grey background for readability */
+    }
+
+    /* Button Styling */
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-weight: 500;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    .btn {
+        font-weight: 500;
+    }
+
+    /* Modal Styling */
+    .modal-content {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .modal-title {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .modal-body {
+        padding-top: 0;
+        color: #555;
+    }
+
+    .modal-footer {
+        border-top: none;
+        padding-top: 0;
+    }
+
+        .modal-footer .btn {
+            margin-left: 5px;
+        }
+
+    /* Close Button Styling */
+    .modal-header .close {
+        color: #333;
+        opacity: 0.7;
+    }
+
+        .modal-header .close:hover {
+            opacity: 1;
+        }
+
+</style>

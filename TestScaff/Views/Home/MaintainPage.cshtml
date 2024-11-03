@@ -1,0 +1,278 @@
+﻿@model TestScaff.Models.MaintainViewModel
+
+@{
+    ViewBag.Title = "Maintain Page";
+}
+
+<div class="container my-4" id="maintain">
+    <h2 class="text-center mb-4" style="font-weight: 300; color: #4a4a4a;">Maintain</h2>
+
+    <div class="row">
+        <!-- Authors Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm" style="border-radius: 12px; border: none; background-color: #f5f8fa;">
+                <div class="card-header" style="background-color: #007bff; color: #fff; border-radius: 12px 12px 0 0;">
+                    <h4 class="card-title mb-0">Authors</h4>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary mb-2" id="addAuthor" data-bs-toggle="modal" data-bs-target="#createAuthorModal" data-url="@Url.Action("Create", "authors")">Create</button>
+                    <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr style="color: #007bff;">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var author in Model.Authors)
+                                {
+                                    <tr>
+                                        <td>@author.authorId</td>
+                                        <td>@author.name @author.surname</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary edit-btn"  data-bs-toggle="modal" data-bs-target="#maintainModal" data-url="@Url.Action("Edit", "authors", new { id = author.authorId })">Edit</button>
+                                            <button class="btn btn-sm btn-outline-danger delete-btn" data-bs-toggle="modal" data-bs-target="#maintainModal" data-url="@Url.Action("Delete", "authors", new { id = author.authorId })">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Types Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm" style="border-radius: 12px; border: none; background-color: #f5f8fa;">
+                <div class="card-header" style="background-color: #007bff; color: #fff; border-radius: 12px 12px 0 0;">
+                    <h4 class="card-title mb-0">Types</h4>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary mb-2" id="addType" data-bs-toggle="modal" data-bs-target="#createTypeModal" data-url="@Url.Action("Create", "types")">Create</button>
+                    <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr style="color: #007bff;">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var type in Model.Types)
+                                {
+                                    <tr>
+                                        <td>@type.typeId</td>
+                                        <td>@type.name</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary edit-btn" data-bs-toggle="modal" data-bs-target="#maintainModal" data-url="@Url.Action("Edit", "types", new { id = type.typeId })">Edit</button>
+                                            <button class="btn btn-sm btn-outline-danger delete-btn" data-bs-toggle="modal" data-bs-target="#maintainModal" data-url="@Url.Action("Delete", "types", new { id = type.typeId })">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Borrows Section -->
+        <div class="col-md-12">
+            <div class="card shadow-sm" style="border-radius: 12px; border: none; background-color: #f5f8fa;">
+                <div class="card-header" style="background-color: #007bff; color: #fff; border-radius: 12px 12px 0 0;">
+                    <h4 class="card-title mb-0">Borrows</h4>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary mb-2" id="addBorrow" data-bs-toggle="modal" data-bs-target="#createBorrowModal" data-url="@Url.Action("Create", "borrows")">Create</button>
+                    <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr style="color: #007bff;">
+                                    <th>ID</th>
+                                    <th>Book</th>
+                                    <th>Student</th>
+                                    <th>Date Borrowed</th>
+                                    <th>Date Returned</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var borrow in Model.Borrows)
+                                {
+                                    <tr>
+                                        <td>@borrow.borrowId</td>
+                                        <td>@borrow.books.name</td>
+                                        <td>@borrow.students.name @borrow.students.surname</td>
+                                        <td>@borrow.takenDate</td>
+                                        <td>@borrow.broughtDate</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary edit-btn" data-bs-toggle="modal" data-bs-target="#maintainModal" data-url="@Url.Action("Edit", "borrows", new { id = borrow.borrowId })">Edit</button>
+                                            <button class="btn btn-sm btn-outline-danger delete-btn" data-bs-toggle="modal" data-bs-target="#maintainModal" data-url="@Url.Action("Delete", "borrows", new { id = borrow.borrowId })">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals for Create/Edit -->
+<div class="modal fade" id="createAuthorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Author</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="authorModalContent">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createTypeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Type</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="typeModalContent">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createBorrowModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Borrow</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="borrowModalContent">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Edit/Delete modals*@
+<div id="maintainModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-content">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            // Open modal for adding new Author
+            $("#addAuthor").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+                $.get(url, function (data) {
+                    $("#authorModalContent").html(data);
+                    $("#createAuthorModal").modal("show");
+                });
+            });
+
+            // Open modal for adding new Type
+            $("#addType").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+                $.get(url, function (data) {
+                    $("#typeModalContent").html(data);
+                    $("#createTypeModal").modal("show");
+                });
+            });
+
+            // Open modal for adding new Borrow
+            $("#addBorrow").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+                $.get(url, function (data) {
+                    $("#borrowModalContent").html(data);
+                    $("#createBorrowModal").modal("show");
+                });
+            });
+
+            // Open modal for editing and deleting
+            $(".delete-btn, .edit-btn").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#modal-content").empty();
+                    $("#modal-content").html(data);
+                    $("#maitainModal").modal("show");
+                });
+            });
+
+
+        });
+    </script>
+}
+
+<style>
+    body {
+        background-color: #eef1f5;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        color: #333;
+    }
+
+    h2 {
+        font-weight: 300;
+        color: #4a4a4a;
+    }
+
+    .card {
+        background-color: #f5f8fa;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+    table thead th {
+        color: #007bff;
+    }
+</style>
